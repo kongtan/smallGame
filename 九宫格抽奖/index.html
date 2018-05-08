@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+   <html lang="en">
+   <head>
+   <meta charset="UTF-8">
+   <meta name="viewport"
+         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+   <title>转盘</title>
+    <script src="http://js.40017.cn/touch/cn/public/zepto.20140212.js?v=2015122901"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+ 
+        .box {
+            width: 210px;
+            background: rgba(0, 0, 0, 0.6);
+            margin: 0 auto;
+        }
+ 
+        .item-line {
+            width: 100%;
+            overflow: hidden;
+        }
+ 
+        .item-line .item {
+            width: 70px;
+            height: 70px;
+            line-height: 70px;;
+            display: block;
+            float: left;
+            text-align: center;
+            text-decoration: none;
+            background: #98bf21;
+            color: #fff;
+            border: 1px solid;
+            box-sizing: border-box;
+        }
+ 
+        .item-line .item.active {
+            background: #D9EE1C;
+        }
+ 
+        .item.btn {
+            background: #9AE58B;
+        }
+    </style>
+</head>
+<body>
+<div class="box-side">
+    <div class="box">
+        <div class="item-line">
+            <a href="javascript:;" class="item item0">奖品一</a>
+            <a href="javascript:;" class="item item1">奖品二</a>
+            <a href="javascript:;" class="item item2">奖品三</a>
+        </div>
+        <div class="item-line">
+            <a href="javascript:;" class="item item7">奖品八</a>
+            <a href="javascript:;" class="item btn" onclick="start();">抽奖</a>
+            <a href="javascript:;" class="item item3">奖品四</a>
+        </div>
+        <div class="item-line">
+            <a href="javascript:;" class="item item6">奖品七</a>
+            <a href="javascript:;" class="item item5">奖品六</a>
+            <a href="javascript:;" class="item item4">奖品五</a>
+        </div>
+    </div>
+</div>
+<script>
+    var index = 0, index1, timer = 100, timeNList = [];
+    //开始执行
+    function start() {
+        var randVal = Math.floor(Math.random() * 8);
+        console.log(randVal);
+        var totalS = 6 * 8 + randVal,
+                time1 = 3 * 1000,
+                a = 2 * totalS / (time1 * time1),
+                ids = 1;
+        timeNList = [];
+        while (ids <= totalS) {
+            timeNList.push(Math.sqrt(2 * ids / a));
+            ids++;
+        }
+        timeNList.reverse();
+        timeNList.forEach(function (t, i) {
+        timeNList[i] -= (timeNList[i + 1] || [0]);
+        })
+        timeNList.pop();
+        timeNList.unshift(timeNList[0]);
+        startRun(0);
+    }
+    //动画
+    function startRun(i) {
+        var setTime1 = setTimeout(function () {
+            index1 = i % 8;
+            $('.item').removeClass("active");
+            $('.item' + index1).addClass("active");
+            if (i <= timeNList.length - 1) {
+                startRun(i);
+            }
+            else {
+                clearTimeout(setTime1);
+            }
+        }, timeNList[i++]);
+    }
+</script>
+</body>
+</html>
+ 
